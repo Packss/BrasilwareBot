@@ -22,7 +22,7 @@ async def teste(ctx):
 
 @bot.command(name='ping', help="Pong!")
 async def ping(ctx):
-    await ctx.send(f'Ping: {(float(bot.latency)*100):0.3f}ms\n{ctx.author.mention}')
+    await ctx.send(f'Ping: {round(bot.latency, 3)*1000}ms\n{ctx.author.mention}')
 
 
 @bot.event
