@@ -17,9 +17,11 @@ bot = commands.Bot(command_prefix='bw.')
 
 bot.load_extension('jishaku')
 
+
 @bot.command(name='teste', help="Testa se o bot está ativo")
 async def teste(ctx):
     await ctx.send('Testado!')
+
 
 @bot.command(name='ping', help="Pong!")
 async def ping(ctx):
@@ -27,13 +29,35 @@ async def ping(ctx):
 
 
 @bot.event
+async def is_owner(user: discord.User):
+    for role in user.roles:
+        if str(role) == "SU":
+            print(f"O usuario {user} pertence ao SU, executando comando")
+            return True
+
+
+bumplock = False
+@bot.event
 async def on_message(message):
     await bot.process_commands(message)
 
     if message.content.startswith('!d bump'):
-        await message.channel.send("Irei te lembrar daqui 2 horas!")
-        await asyncio.sleep(7200)
-        await message.channel.send(f"{message.author.mention} hora de dar bump!")
+        global bumplock
+        if bumplock == True:
+            await message.channel.send(
+                f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere"
+                )  
+        else:
+            await message.channel.send(
+                "Irei te lembrar daqui 2 horas!"
+                )
+            bumplock = True
+            await asyncio.sleep(7200)
+            bumplock = False
+            await message.channel.send(
+                f"{message.author.mention} hora de dar bump!"
+                )
+
 
 @bot.event
 async def on_ready():
@@ -43,15 +67,12 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})'
     )
 
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Membros do server:\n - {members}')
-
 
 @bot.event
 async def on_member_join(member):
     await member.create_dm()
     await member.dm_channel.send(
-        f'Olá {member.name} seja bem vindo ao Brasilware!\n Sinta-se livre para conversar e pedir ajuda, e não se esqueça de ler as regras.'
+        f'Olá {member.name} seja bem vindo ao Brasilware!\nSinta-se livre para conversar e pedir ajuda, e não se esqueça de ler as regras.'
     )
 
 
