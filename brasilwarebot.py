@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.environ('DISCORD_TOKEN')
-GUILD = os.environ('DISCORD_GUILD')
+TOKEN = os.environ['DISCORD_TOKEN']
+GUILD = os.environ['DISCORD_GUILD']
 
 bot = commands.Bot(command_prefix='bw.')
 
