@@ -3,6 +3,7 @@ import discord
 import os
 import random
 import asyncio
+import jishaku
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -14,11 +15,11 @@ GUILD = os.environ['DISCORD_GUILD']
 
 bot = commands.Bot(command_prefix='bw.')
 
+bot.load_extension('jishaku')
 
 @bot.command(name='teste', help="Testa se o bot está ativo")
 async def teste(ctx):
     await ctx.send('Testado!')
-
 
 @bot.command(name='ping', help="Pong!")
 async def ping(ctx):
