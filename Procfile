@@ -1,1 +1,1 @@
-web: python3 brasilwarebot.py
+worker: python brasilwarebot.py
