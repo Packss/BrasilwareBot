@@ -16,8 +16,13 @@ bot = commands.Bot(command_prefix='bw.')
 
 
 @bot.command(name='teste', help="Testa se o bot está ativo")
-async def nine_nine(ctx):
+async def teste(ctx):
     await ctx.send('Testado!')
+
+
+@bot.command(name='ping', help="Pong!")
+async def ping(ctx):
+    await ctx.send(f'Ping: {(float(bot.latency)*100):0.3f}ms\n{ctx.author.mention}')
 
 
 @bot.event
