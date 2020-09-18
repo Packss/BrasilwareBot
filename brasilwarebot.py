@@ -37,27 +37,35 @@ async def is_owner(user: discord.User):
 
 
 bumplock = False
+bumplist = []
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
 
     if message.content.startswith('!d bump'):
         global bumplock
+        global bumplist
         if bumplock == True:
             await message.channel.send(
-                f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere"
-                )  
+                f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere.\nPorém vou te mencionar quando o proximo bump estiver disponivel"
+                )
+            bumplist.append(message.author.mention)
+
         else:
             await message.channel.send(
                 "Irei te lembrar daqui 2 horas!"
                 )
             bumplock = True
-            await asyncio.sleep(7200)
+            await asyncio.sleep(2700)
             bumplock = False
             await message.channel.send(
                 f"{message.author.mention} hora de dar bump!"
                 )
-
+            for member in bumplist:
+                await message.channel.send(
+                    f"{member} você tentou dar um bump, agora é a hora"
+                )
+            bumplist.clear()
 
 @bot.event
 async def on_ready():
