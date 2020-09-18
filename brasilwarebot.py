@@ -56,7 +56,7 @@ async def on_message(message):
                 "Irei te lembrar daqui 2 horas!"
                 )
             bumplock = True
-            await asyncio.sleep(2700)
+            await asyncio.sleep(7200)
             bumplock = False
             await message.channel.send(
                 f"{message.author.mention} hora de dar bump!"
