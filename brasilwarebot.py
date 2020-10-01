@@ -42,7 +42,7 @@ bumplist = []
 async def on_message(message):
     await bot.process_commands(message)
 
-    if message.content.startswith('!d bump'):
+    if message.content.lower().startswith('!d bump') or message.content.lower().startswith('!disboard bump'):
         global bumplock
         global bumplist
         if bumplock == True:
