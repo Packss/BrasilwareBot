@@ -1,4 +1,7 @@
 # bot.py
+
+# vai se fuder jakez
+
 import discord
 import os
 import random
@@ -42,7 +45,7 @@ bumplist = []
 async def on_message(message):
     await bot.process_commands(message)
 
-    if message.content.lower().startswith('!d bump') or message.content.lower().startswith('!disboard bump'):
+    if message.content in ('!d bump', '!disboard bump'):
         global bumplock
         global bumplist
         if bumplock == True:
