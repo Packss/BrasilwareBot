@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.environ['DISCORD_TOKEN']
-GUILD = os.environ['DISCORD_GUILD']
+GUILD = int(os.environ['DISCORD_GUILD'])
 
 bot = commands.Bot(command_prefix='bw.')
 
@@ -44,10 +44,14 @@ bumplist = []
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+    lista = message.content.split(' ')[:2]
+    check = (
+        lista[0] in ('!d', '!disboard'),
+        lista[1] == 'bump'
+    )
+    if all(check):
+        global bumplock, bumplist
 
-    if message.content in ('!d bump', '!disboard bump'):
-        global bumplock
-        global bumplist
         if bumplock == True:
             await message.channel.send(
                 f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere.\nPorém vou te mencionar quando o proximo bump estiver disponivel"
@@ -72,7 +76,7 @@ async def on_message(message):
 
 @bot.event
 async def on_ready():
-    guild = discord.utils.get(bot.guilds, name=GUILD)
+    guild = bot.get_guild(GUILD)
     print(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
@@ -83,7 +87,8 @@ async def on_ready():
 async def on_member_join(member):
     await member.create_dm()
     await member.dm_channel.send(
-        f'Olá {member.name} seja bem vindo ao Brasilware!\nSinta-se livre para conversar e pedir ajuda, e não se esqueça de ler as regras.'
+        f'Olá {member.name} seja bem vindo ao Brasilware!\n'
+        f'Sinta-se livre para conversar e pedir ajuda, e não se esqueça de ler as <#729796356067033088>.'
     )
 
 
