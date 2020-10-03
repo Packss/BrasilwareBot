@@ -1,4 +1,4 @@
-discord.py==1.4.1
+discord.py==1.5.0
 jishaku==1.19.1.200
 discord==1.0.1
 python-dotenv==0.14.0
