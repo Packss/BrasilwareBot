@@ -74,7 +74,7 @@ async def on_message(message):
             bumplist.append(message.author.mention)
 
             bumplock = True
-            await asyncio.sleep(10)
+            await asyncio.sleep(7200)
             bumplock = False
 
             await message.channel.send(
