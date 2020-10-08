@@ -45,30 +45,42 @@ bumplist = []
 async def on_message(message):
     await bot.process_commands(message)
     lista = message.content.split(' ')[:2]
+    if len(lista) == 1: return
+
     check = (
         lista[0] in ('!d', '!disboard'),
-        lista[1] == 'bump'
+        lista[1] == 'bump',
+        str(message.channel.id) == '751589697192591501'
     )
+    
     if all(check):
         global bumplock, bumplist
 
         if bumplock == True:
-            await message.channel.send(
-                f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere.\nPorém vou te mencionar quando o proximo bump estiver disponivel"
-                )
-            bumplist.append(message.author.mention)
+            if message.author.mention not in bumplist:
+                await message.channel.send(
+                    f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere.\nPorém vou te mencionar quando o proximo bump estiver disponivel"
+                    )
+                bumplist.append(message.author.mention)
+            else:
+                await message.channel.send(
+                    f"{message.author.mention} Você ja tentou dar bump, pare imediatamente."
+                    )
 
         else:
             await message.channel.send(
                 "Irei te lembrar daqui 2 horas!"
                 )
+            bumplist.append(message.author.mention)
+
             bumplock = True
-            await asyncio.sleep(7200)
+            await asyncio.sleep(10)
             bumplock = False
+
             await message.channel.send(
                 f"{message.author.mention} hora de dar bump!"
                 )
-            for member in bumplist:
+            for member in bumplist[1:]:
                 await message.channel.send(
                     f"{member} você tentou dar um bump, agora é a hora"
                 )
@@ -78,7 +90,7 @@ async def on_message(message):
 async def on_ready():
     guild = bot.get_guild(GUILD)
     print(
-        f'{bot.user} is connected to the following guild:\n'
+        f'{bot.user} está conectado a essa guilda:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
