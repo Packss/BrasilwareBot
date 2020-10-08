@@ -38,9 +38,8 @@ async def is_owner(user: discord.User):
             print(f"O usuario {user} pertence ao SU, executando comando")
             return True
 
-
-bumplock = False
-bumplist = []
+bot.bumplock = False
+bot.bumplist = []
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
@@ -50,18 +49,16 @@ async def on_message(message):
     check = (
         lista[0] in ('!d', '!disboard'),
         lista[1] == 'bump',
-        str(message.channel.id) == '751589697192591501'
+        message.channel.id == 751589697192591501
     )
     
     if all(check):
-        global bumplock, bumplist
-
-        if bumplock == True:
-            if message.author.mention not in bumplist:
+        if bot.bumplock == True:
+            if message.author.mention not in bot.bumplist:
                 await message.channel.send(
                     f"{message.author.mention} o servidor teve um bump a menos de 2 horas, por favor espere.\nPorém vou te mencionar quando o proximo bump estiver disponivel"
                     )
-                bumplist.append(message.author.mention)
+                bot.bumplist.append(message.author.mention)
             else:
                 await message.channel.send(
                     f"{message.author.mention} Você ja tentou dar bump, pare imediatamente."
@@ -71,20 +68,20 @@ async def on_message(message):
             await message.channel.send(
                 "Irei te lembrar daqui 2 horas!"
                 )
-            bumplist.append(message.author.mention)
+            bot.bumplist.append(message.author.mention)
 
-            bumplock = True
+            bot.bumplock = True
             await asyncio.sleep(7200)
-            bumplock = False
+            bot.bumplock = False
 
             await message.channel.send(
                 f"{message.author.mention} hora de dar bump!"
                 )
-            for member in bumplist[1:]:
+            for member in bot.bumplist[1:]:
                 await message.channel.send(
                     f"{member} você tentou dar um bump, agora é a hora"
                 )
-            bumplist.clear()
+            bot.bumplist.clear()
 
 @bot.event
 async def on_ready():
