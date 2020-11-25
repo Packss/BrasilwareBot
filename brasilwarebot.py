@@ -1,7 +1,5 @@
 # bot.py
 
-# vai se fuder jakez
-
 import discord
 import os
 import random
@@ -12,7 +10,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
-
 TOKEN = os.environ['DISCORD_TOKEN']
 GUILD = int(os.environ['DISCORD_GUILD'])
 
@@ -28,8 +25,22 @@ async def teste(ctx):
 
 @bot.command(name='ping', help="Pong!")
 async def ping(ctx):
-    await ctx.send(f'Ping: {round(bot.latency, 3)*1000}ms\n{ctx.author.mention}')
+    ping= round(bot.latency, 3)*1000
+    await ctx.send(f"{ctx.author.mention} meu ping é de {ping}ms!")
 
+
+@bot.command(name='roll', help="Rola um dado, caso nenhum seja especificado o d20 é rolado")
+async def roll(ctx, dado="d20"):
+    possiveis = [3, 4, 6, 8, 10, 20, 32]
+    if int(dado[1:]) in possiveis:
+        resultado = random.randint(1, int(dado[1:]))
+        await ctx.send(f"Você rolou {resultado}!")
+    else:
+        lista = ""
+        for x in possiveis:
+            lista = lista+f"d{x} "
+        await ctx.send(f"Valor {dado} não suportado.\nOs valores suportados são: {lista}")
+        
 
 @bot.event
 async def is_owner(user: discord.User):
@@ -37,6 +48,7 @@ async def is_owner(user: discord.User):
         if str(role) == "SU":
             print(f"O usuario {user} pertence ao SU, executando comando")
             return True
+
 
 bot.bumplock = False
 bot.bumplist = []
@@ -82,6 +94,7 @@ async def on_message(message):
                     f"{member} você tentou dar um bump, agora é a hora"
                 )
             bot.bumplist.clear()
+
 
 @bot.event
 async def on_ready():
